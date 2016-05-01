@@ -8,5 +8,14 @@
     <Setting Name="DefaultSecondValue" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">2</Value>
     </Setting>
+    <Setting Name="FirstParamName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">x</Value>
+    </Setting>
+    <Setting Name="SecondParamName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">y</Value>
+    </Setting>
+    <Setting Name="OperationResultLiteral" Type="System.String" Scope="User">
+      <Value Profile="(Default)">result</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

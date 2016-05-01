@@ -46,5 +46,41 @@ namespace CSharp_operators.Properties {
                 this["DefaultSecondValue"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("x")]
+        public string FirstParamName {
+            get {
+                return ((string)(this["FirstParamName"]));
+            }
+            set {
+                this["FirstParamName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("y")]
+        public string SecondParamName {
+            get {
+                return ((string)(this["SecondParamName"]));
+            }
+            set {
+                this["SecondParamName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("result")]
+        public string OperationResultLiteral {
+            get {
+                return ((string)(this["OperationResultLiteral"]));
+            }
+            set {
+                this["OperationResultLiteral"] = value;
+            }
+        }
     }
 }

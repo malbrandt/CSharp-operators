@@ -3,55 +3,43 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:properties="clr-namespace:CSharp_operators.Properties"
         xmlns:local="clr-namespace:CSharp_operators"
         xmlns:metroChart="clr-namespace:De.TorstenMandelkow.MetroChart;assembly=De.TorstenMandelkow.MetroChart"
+        xmlns:props="clr-namespace:CSharp_operators.Properties"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d" d:DataContext="{d:DesignInstance local:MainWindow}"
-        Title="CSharp operators" Height="448" Width="677" WindowStartupLocation="CenterScreen">
+        Title="CSharp operators" Height="600" Width="1000" MinWidth="600" MinHeight="600"  WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style TargetType="{x:Type Label}">
             <Setter Property="FontFamily" Value="Segoe UI Light" />
+        </Style>
+        <Style TargetType="{x:Type Separator}">
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="VerticalAlignment" Value="Bottom" />
         </Style>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <metroChart:PieChart
-            ChartTitle="Values comparision"
-            ChartSubTitle="Values comparision after operation" Grid.Column="1">
-            <metroChart:PieChart.Series>
-                <metroChart:ChartSeries 
-                    DisplayMember="String"
-                    ValueMember="Int"
-                    ItemsSource="{Binding PieChartData}"/>
-            </metroChart:PieChart.Series>
-        </metroChart:PieChart>
-        <Grid Grid.Row="1" Margin="10,5" Grid.Column="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="50"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="50"/>
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
-            <Label Content="x" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" FontWeight="Bold"/>
-            <Slider Value="{Binding Source={x:Static properties:Settings.Default}, Path=DefaultFirstValue}" Grid.Column="1" VerticalAlignment="Center" Margin="0,10,0,9" SmallChange="1" Minimum="-100" Maximum="100"/>
-            <Label Content="y" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" FontWeight="Bold" Grid.Column="2"/>
-            <Slider Value="{Binding Source={x:Static properties:Settings.Default}, Path=DefaultSecondValue}" Grid.Column="3" VerticalAlignment="Center" Maximum="100" Minimum="-100" SmallChange="1"/>
-        </Grid>
-        <Grid Grid.Row="0" Grid.Column="0">
+        <Grid x:Name="LeftGrid" Grid.Row="0" Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="1*" />
+                <RowDefinition />
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="10"/>
             </Grid.RowDefinitions>
-            <Label x:Name="label" Content="Operators list:" FontSize="26.667" />
-            <ListBox x:Name="OperatorsListBox" Grid.Row="1" ItemsSource="{Binding OperationInfos}" BorderBrush="{x:Null}">
+            <Label Content="1) Operation:" FontSize="26.667" />
+            <ListBox x:Name="OperatorsListBox" Grid.Row="1" ItemsSource="{Binding OperationInfos}" BorderBrush="{x:Null}" SelectedItem="{Binding Path=CurrentlySelectedOperationInfo, Mode=OneWayToSource}" SelectionChanged="OperatorsListBox_SelectionChanged" SelectedIndex="0" Height="253">
                 <ListBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type local:OperationInfo}">
                         <Grid Width="200">
@@ -68,11 +56,95 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
+            <Separator Grid.Row="1"/>
+            <Label Content="2) Input values:" FontSize="26.667" Grid.Row="2" VerticalAlignment="Top" />
+            <Grid x:Name="InputValuesGrid" Margin="5"  Grid.Row="3" Grid.Column="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="5"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <Label Content="x" HorizontalAlignment="Center" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" Margin="2,0"/>
+                <xctk:IntegerUpDown Grid.Row="0" Grid.Column="1" Value="{Binding FirstValue}" AllowSpin="True" Minimum="0" Increment="1" Maximum="{x:Static system:Int32.MaxValue}" ValueChanged="UpDownBase_OnValueChanged" VerticalAlignment="Center" FontSize="14.667" FontFamily="Segoe UI Light"/>
+                <Label Content="y" HorizontalAlignment="Center" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" Grid.Row="2"
+                       Grid.Column="0" />
+                <xctk:IntegerUpDown Value="{Binding SecondValue}" AllowSpin="True" Minimum="0" Increment="1" Maximum="{x:Static system:Int32.MaxValue}" ValueChanged="UpDownBase_OnValueChanged" VerticalAlignment="Center" FontSize="14.667" FontFamily="Segoe UI Light"
+                                 Grid.Column="1" Grid.Row="2"/>
+                <Button Content="Swap" Grid.Row="0" Grid.Column="3" Click="Button_Click" FontFamily="Segoe UI Light" FontSize="13.333" VerticalAlignment="Center" Padding="3,1"/>
+            </Grid>
+            <Label Content="3) Output values:" FontSize="26.667" Grid.Row="4" VerticalAlignment="Top"/>
+            <Grid Grid.Row="5">
+                <Grid.Resources>
+                    <Style TargetType="{x:Type Label}">
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                        <Setter Property="HorizontalAlignment" Value="Center" />
+                        <Setter Property="FontSize" Value="12" />
+                        <Setter Property="Padding" Value="0" />
+                    </Style>
+                </Grid.Resources>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Content="{Binding FirstParamName, Source={x:Static props:Settings.Default}}" FontSize="16"/>
+                <Label Grid.Row="1" Grid.Column="0"
+                       Content="{Binding SecondParamName, Source={x:Static props:Settings.Default}}" FontSize="16"/>
+                <Label Grid.Row="4" Grid.Column="0" Content="=" FontSize="16"/>
+                <Label Grid.Row="0" Grid.Column="1" Content="{Binding FirstValueBinary}" FontFamily="Consolas" FontSize="16"/>
+                <Label Grid.Column="1" Content="{Binding SecondValueBinary}" Grid.Row="1" FontFamily="Consolas" FontSize="16" VerticalAlignment="Stretch"/>
+                <Label Content="{Binding LastResultBinary}" Grid.Row="4" FontSize="16" Grid.Column="1" FontFamily="Consolas"/>
+            </Grid>
         </Grid>
-        <StatusBar Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="0">
-            <StatusBarItem>
-                <TextBlock Text="{Binding BitToInteger}" />
+        <StatusBar Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0">
+            <StatusBarItem FontFamily="Consolas" HorizontalAlignment="Left">
+                <TextBlock Text="{Binding ExpressionString}"/>
+            </StatusBarItem>
+            <StatusBarItem FontFamily="Segoe UI Light" HorizontalContentAlignment="Right">
+                <TextBlock Text="Created by Marek Malbrandt (2016)" />
             </StatusBarItem>
         </StatusBar>
+        <TabControl Grid.Row="0" Grid.Column="1" Margin="5" SelectedIndex="1">
+            <TabItem Header="Input values">
+                <Grid Background="#FFE5E5E5">
+                    <metroChart:PieChart x:Name="PieChart"
+                		ChartTitle="Input values"
+                		ChartSubTitle="Values comparision before operation">
+                        <metroChart:PieChart.Series>
+                            <metroChart:ChartSeries 
+                				DisplayMember="String"
+                				ValueMember="Int"
+                				ItemsSource="{Binding PieChartData1}"/>
+                        </metroChart:PieChart.Series>
+                    </metroChart:PieChart>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Output values">
+                <Grid Background="#FFE5E5E5">
+                    <metroChart:PieChart
+                		ChartTitle="Output values"
+                		ChartSubTitle="Values comparision after operation" Grid.Row="0">
+                        <metroChart:PieChart.Series>
+                            <metroChart:ChartSeries 
+                				DisplayMember="String"
+                				ValueMember="Int"
+                				ItemsSource="{Binding PieChartData2}"/>
+                        </metroChart:PieChart.Series>
+                    </metroChart:PieChart>
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

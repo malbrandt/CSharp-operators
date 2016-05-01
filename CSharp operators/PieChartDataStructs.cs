@@ -1,13 +1,15 @@
 ﻿namespace CSharp_operators
 {
-    public struct StringAndInt
+    public class StringAndInt
     {
-        public StringAndInt(string String, int Int)
+
+        public StringAndInt(string @string, int @int)
         {
-            this.String = String;
-            this.Int = Int;
+            String = @string;
+            Int = @int;
         }
-        public string String { get; set; }
+
         public int Int { get; set; }
+        public string String { get; set; }
     }
 }
